@@ -123,7 +123,33 @@ return "Goodbye 😊"
 return "I am still learning."
 
 }
+async function sendMessage(){
 
+let input = document.getElementById("userInput").value
+let messages = document.getElementById("messages")
+
+messages.innerHTML += "<p><b>You:</b> "+input+"</p>"
+
+let response = await fetch("https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer YOUR_API_KEY"
+},
+body:JSON.stringify({
+inputs:input
+})
+})
+
+let data = await response.json()
+
+let reply = data[0].generated_text || "AI is thinking..."
+
+messages.innerHTML += "<p><b>SatyaAI:</b> "+reply+"</p>"
+
+document.getElementById("userInput").value=""
+
+}
 </script>
 
 <style>
@@ -146,20 +172,5 @@ border:none;
 </head>
 
 <body>
-
-<h1>SatyaAI Video Generator</h1>
-
-<p>Enter your idea for AI video</p>
-
-<input type="text" placeholder="Type video idea">
-
-<br><br>
-
-<button onclick="alert('AI Video generating soon')">
-Generate Video
-</button>
-
-</body>
-</html>
 </body>
 </html>
